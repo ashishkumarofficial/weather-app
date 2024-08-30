@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        *{
+            padding: 0px ;
+            margin: 0px ;
+        }
+        body{
+            
+            width:100vw ;
+            height: 100vh;
+        
+            background-image:linear-gradient(135deg ,hwb(30 49% 51% / 0.9),hsla(0, 0%, 28%, 0.6))
+            , url("https://wallpapercave.com/wp/wp4599946.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .input{
+            position: relative;
+            top:40px;
+            left:45px;
+            border: hidden;
+            border-radius:50px  ;
+            width:21rem;
+            height: 2rem;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color:rgb(87, 83, 83);
+            padding-left:20px ;
+        }
+        .container{
+            background-image:linear-gradient(135deg ,hsla(206, 53%, 44%, 0.6),hsla(0, 62%, 42%, 0.6));
+            height: 35rem;
+            width: 28rem;
+            border-radius: 30px;
+            border:1px solid silver;
+        }
+       
+        .images{
+            position: relative;
+            top: 40px;
+            left:-10%;
+            width: 15rem;
+            height: 15rem;
+        }
+
+        input::placeholder{
+            font-size: 1.3rem;  
+        }
+        i{
+          position: relative;
+          top:-211px ;
+          right:-130px   
+        }
+        h1{
+            position: relative;
+            top:10px;
+            left: 140px;
+            font-size:80px;
+            color:white;
+        }
+        h2{
+            position: relative;
+            top:40px ;
+            margin-left:10% ;
+            font-size:50px;
+            color:white;
+        }
+           button{
+            position: relative;
+            top:5% ;
+            left:14.2%;
+            background-color:hsla(332, 85%, 39%, 0.3);
+            margin: auto;
+            border:hidden;
+            border-radius:10px  ;
+            width: 20rem;
+            height: 2rem;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color:silver;
+        }
+        .humidity{
+            position: relative;
+            top:50px;
+            left: -9%;
+             height: 70px;
+            width: 70px;
+        }
+        .para1{
+            position: relative;
+            top:50px;
+            left:-40px;
+            font-size: 30px;
+            color:azure;
+
+        }
+        .second{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .para2{
+            position: relative;
+            top:50px;
+        
+            font-size: 30px;
+            color:azure;
+
+        }
+        .windspeed{
+            position: relative;
+            top:50px;
+            left:-2%;
+             height: 60px;
+            width: 60px;
+        }
+        .error{
+           height: 100vh;
+           width: 100vw;
+           background-color: red;
+        }
+        .data{
+            position: relative;
+            top:-110px;
+            left: 27rem;
+            font-size:1.3rem;
+            color:aliceblue;
+        }
+        .divdat1,.divdat2,.divdat3,.divdat4,.divdat5{
+            margin: 10px;
+            color:aliceblue;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="data">
+        <div class="divdat1">WindSpeed : 00</div>
+       <div class="divdat2">Visibility : 00</div>
+       <div class="divdat3">CloudCover : 00</div>
+       <div class="divdat4">DewPoint : 00</div>
+       <div class="divdat5">WindDirection : 00</div>
+
+    </div>
+    <div class="container">
+        <input type="text" class="input" placeholder="enter your city name !!"> 
+       
+        <img src="" alt="" class="images"/><i class="fa-solid fa-magnifying-glass"></i>
+        <h1>
+            0°C
+        </h1>
+        <h2>Allahabad</h2>
+        <div class="second">
+        <img src="humidity.png" alt="" class="humidity"><p class="para1">00%<br/>humidity</p>
+        <img src="windspeed.png" alt="" class="windspeed"><p class="para2">0.0km/H<br/>Windspeed</p>
+    </div>
+    </div>
+    <script>
+        let arr=["cloud.png","danger.png","rain.png","normal.png","sun.png"];
+        const url = "https://api.tomorrow.io/v4/weather/forecast?location=manali&apikey=biHLF3zQIPMxFKY5Yb0h8qNDbC65gOGr";
+        let input=document.querySelector(".input");
+        let divs1=document.querySelector(".divdat1");
+        let divs2=document.querySelector(".divdat2");
+        let divs3=document.querySelector(".divdat3");
+        let divs4=document.querySelector(".divdat4");
+        let divs5=document.querySelector(".divdat5");
+
+        function funs(){
+            let inputs=document.querySelector(".input").value;
+                      if(inputs==""){
+                        inputs="allahabad";
+                      }
+            const based_url= `https://api.tomorrow.io/v4/weather/forecast?location=${inputs}&apikey=biHLF3zQIPMxFKY5Yb0h8qNDbC65gOGr`;    
+              const gets=async()=>{
+                    let response= await fetch(based_url);
+                    let data= await response.json();
+                    let ds=data.timelines.minutely[1];
+                    let image =document.querySelector(".images");
+                    divs1.innerHTML=`WindSpeed : ${ds.values.windSpeed}`;
+                    divs2.innerHTML=`Visibility : ${ds.values.visibility}`;
+                    divs3.innerHTML=`CloudCover : ${ds.values.cloudCover}`;
+                    divs4.innerHTML=`DewPoint : ${ds.values.dewPoint}`;
+                    divs5.innerHTML=`WindDirection : ${ds.values.windDirection}`;
+                    if(ds.values.temperature<=20){ 
+                        image.src="cloud.png";
+                        if(ds.values.rainIntensity<=10){
+                        image.src="rain.png";    
+                        }
+                        if(ds.values.rainIntensity>=20){
+                            image.src="danger.png";
+                        }
+                    }else if(ds.values.temperature>=20&&ds.values.temperature<=40){
+                        image.src="normal.png";
+                        
+                    }else if(ds.values.temperature>=40){
+                        image.src="sun.png";
+                    }
+                   document.querySelector(".para1").innerHTML=`${ds.values.humidity}%<br/>humidity`;
+                      console.log(ds);
+                      document.querySelector(".para2").innerHTML=`${ds.values.windSpeed}Km/H<br/>Windspeed`;
+                      document.querySelector("h1").innerHTML=`${ds.values.temperature}°C`;
+                       document.querySelector("h2").innerHTML=inputs;
+                    }
+                gets(); 
+        }
+        if(navigator.onLine){
+        document.querySelector("i").addEventListener("click",()=>{
+             funs();
+        })
+        window.addEventListener("load",()=>{
+            funs();
+        })
+        document.querySelector("input").addEventListener("keydown",(e)=>{
+            if(e.key=="Enter"){
+                funs();
+            }
+        })
+    }else{   
+        window.open("C:/Users/prashant/Desktop/projects/projects/weather/weather2.html","_self")    
+        document.write("he")
+    }
+        </script>
+</body>
+</html>
